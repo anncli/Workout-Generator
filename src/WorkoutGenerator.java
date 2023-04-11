@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class WorkoutGenerator {
+public class WorkoutGenerator extends Exercise {
 	
 	public static Scanner userInput = new Scanner(System.in);
 	
@@ -44,12 +44,27 @@ public class WorkoutGenerator {
 		System.out.println();
 		System.out.println("Generating workout...");
 		
-		ArrayList<String> exercises = new ArrayList<>(generateExercises(num, muscle));
-		System.out.println(exercises.toString());
+		ArrayList<Exercise> exercises = new ArrayList<>();
+		for(int i = 0; i < num; i++) {
+			exercises.add(new Exercise());
+		}
+		generateExercises(exercises, num, muscle);
+		
+		//Print Workout
+		System.out.println("Here is your " + muscle + " workout");
+		System.out.println("EXERCISE \tREPS");
+		for(int i = 0; i < exercises.size(); i++) {
+			exercises.get(i).toString();
+		}
+		
+		for(Exercise e : exercises) {
+			System.out.println(e.getName() + " " + e.getReps());
+		}
 	}
 	
 	//Randomize numbers
-	public static ArrayList<String> generateExercises(int numExercises, String muscle) throws FileNotFoundException {
+	public static void generateExercises(ArrayList<Exercise> list, int numExercises,
+			String muscle) throws FileNotFoundException {
 		//Shuffle list of rows
 		Integer[] intArray = new Integer[getFileLength(muscle)];
 		for(int i = 0; i < intArray.length; i++) {
@@ -66,12 +81,14 @@ public class WorkoutGenerator {
 		}
 		
 		//Add exercise names
-		ArrayList<String> exercises = new ArrayList<String>();
-		for(int i : rowList) {
-			exercises.add(getExercise(i, muscle));
+		for(int i = 0; i < numExercises; i++) {
+			list.get(i).setName(pullName(rowList[i], muscle));
 		}
 		
-		return exercises;
+		//Add rep counts
+		for(int i = 0; i < numExercises; i++) {
+			list.get(i).setReps(generateReps(rowList[i], muscle));
+		}
 	}
 	
 	public static int getFileLength(String muscle) throws FileNotFoundException {
@@ -88,7 +105,7 @@ public class WorkoutGenerator {
 		return lineCount;
 	}
 	
-	public static String getExercise(int row, String muscle) throws FileNotFoundException {
+	public static String pullName(int row, String muscle) throws FileNotFoundException {
 		Scanner fileScanner = new Scanner(getFileName(muscle));
 		fileScanner.useDelimiter(",");
 		for(int i = 0; i < row; i++) {
@@ -100,6 +117,27 @@ public class WorkoutGenerator {
 		fileScanner.close();  //closes the scanner  
 
 		return exercise;
+	}
+	
+	public static int generateReps(int row, String muscle) throws FileNotFoundException {
+		Scanner fileScanner = new Scanner(getFileName(muscle));
+		fileScanner.useDelimiter(",");
+		for(int i = 0; i < row; i++) {
+			fileScanner.nextLine();
+		}
+		
+		fileScanner.next();
+		
+		int min = fileScanner.nextInt();
+		fileScanner.useDelimiter("");
+		fileScanner.next();
+		fileScanner.useDelimiter("\r\n");
+		int max = fileScanner.nextInt() + 1;
+		
+		Random rng = new Random();
+		int reps = rng.nextInt(max-min) + min;
+
+		return reps;
 	}
 	
 	public static File getFileName(String muscle) throws FileNotFoundException {
