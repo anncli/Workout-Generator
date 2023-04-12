@@ -30,6 +30,6 @@ public class Exercise {
 	}
 	
 	public String toString() {
-		return String.format("{Exercise:" + getName() + "\t Reps:" + getReps() + "}");
+		return String.format(getName() + "\t" + getReps());
 	}
 }

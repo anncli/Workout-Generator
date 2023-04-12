@@ -43,6 +43,7 @@ public class WorkoutGenerator extends Exercise {
 		}
 		System.out.println();
 		System.out.println("Generating workout...");
+		System.out.println();
 		
 		ArrayList<Exercise> exercises = new ArrayList<>();
 		for(int i = 0; i < num; i++) {
@@ -51,14 +52,24 @@ public class WorkoutGenerator extends Exercise {
 		generateExercises(exercises, num, muscle);
 		
 		//Print Workout
+		int counter = 0;
 		System.out.println("Here is your " + muscle + " workout");
 		System.out.println("EXERCISE \tREPS");
 		for(int i = 0; i < exercises.size(); i++) {
-			exercises.get(i).toString();
-		}
-		
-		for(Exercise e : exercises) {
-			System.out.println(e.getName() + " " + e.getReps());
+			System.out.println(exercises.get(i).toString());
+			counter++;
+			if(counter == 1 && intensity.equalsIgnoreCase("light")) {
+				System.out.println("REST \t\t20 seconds");
+				counter = 0;
+			}
+			else if(counter == 2 && intensity.equalsIgnoreCase("moderate")) {
+				System.out.println("REST \t\t30 seconds");
+				counter = 0;
+			}
+			else if(counter == 3 && intensity.equalsIgnoreCase("intense")) {
+				System.out.println("REST \t\t30 seconds");
+				counter = 0;
+			}
 		}
 	}
 	
