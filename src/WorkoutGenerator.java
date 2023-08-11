@@ -56,7 +56,7 @@ public class WorkoutGenerator extends Exercise {
 		System.out.println("Here is your " + muscle + " workout");
 		System.out.println("EXERCISE \tREPS");
 		for(int i = 0; i < exercises.size(); i++) {
-			System.out.println(exercises.get(i).toString());
+			System.out.println(exercises.get(i).toString(false));
 			counter++;
 			if(counter == 1 && intensity.equalsIgnoreCase("light")) {
 				System.out.println("REST \t\t20 seconds");

@@ -1,9 +1,11 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
 
-public class WorkoutGeneratorGUI implements ActionListener{
+public class WorkoutGeneratorGUI extends WorkoutGenerator implements ActionListener{
 	
 	String selectedMuscle = "";
 	private JFrame frame;
@@ -26,8 +28,10 @@ public class WorkoutGeneratorGUI implements ActionListener{
 	private JLabel intensityLabel;
 	
 	private JButton generateButton;
+	private boolean generate = false;
 	
-	private JLabel blank = new JLabel("");
+	JLabel blank = new JLabel("");
+
 	
 	public WorkoutGeneratorGUI() {
 		frame = new JFrame();
@@ -85,6 +89,7 @@ public class WorkoutGeneratorGUI implements ActionListener{
 		panel.add(moderateButton);
 		panel.add(intenseButton);
 		panel.add(intensityLabel);
+		
 		panel.add(blank);
 		
 		//Generate
@@ -100,6 +105,56 @@ public class WorkoutGeneratorGUI implements ActionListener{
 	public static void main(String[] args) {
 		new WorkoutGeneratorGUI();
 
+	}
+	
+	public void callGenerator() throws FileNotFoundException {
+		ArrayList<Exercise> exercises = new ArrayList<>();
+		for(int i = 0; i < exerciseCount; i++) {
+			exercises.add(new Exercise());
+		}
+		generateExercises(exercises, exerciseCount, selectedMuscle.toLowerCase());
+		
+		int counter = 0;
+		panel.setBorder(BorderFactory.createEmptyBorder(20, 80, 20, 0));
+		GridLayout layout = new GridLayout(0, 2);
+		layout.setHgap(25);
+		panel.setLayout(layout);
+		JLabel tableTitle = new JLabel("EXERCISE");
+		panel.add(tableTitle);
+		tableTitle = new JLabel("REPS");
+		panel.add(tableTitle);
+		
+		JLabel exercise;
+		JLabel reps;
+		JLabel rest;
+		for(int i = 0; i < exercises.size(); i++) {
+			exercise = new JLabel(exercises.get(i).toString(true).split(";")[0]);
+			reps = new JLabel(exercises.get(i).toString(true).split(";")[1]);
+			panel.add(exercise);
+			panel.add(reps);
+			counter++;
+			if(counter == 1 && intensity.equalsIgnoreCase("light")) {
+				rest = new JLabel("REST \t\t20 seconds");
+				panel.add(rest);
+				JLabel blank = new JLabel("");
+				panel.add(blank);
+				counter = 0;
+			}
+			else if(counter == 2 && intensity.equalsIgnoreCase("moderate")) {
+				rest = new JLabel("REST \t\t30 seconds");
+				panel.add(rest);
+				JLabel blank = new JLabel("");
+				panel.add(blank);
+				counter = 0;
+			}
+			else if(counter == 3 && intensity.equalsIgnoreCase("intense")) {
+				rest = new JLabel("REST \t\t30 seconds");
+				panel.add(rest);
+				JLabel blank = new JLabel("");
+				panel.add(blank);
+				counter = 0;
+			}
+		}
 	}
 
 	@Override
@@ -140,6 +195,12 @@ public class WorkoutGeneratorGUI implements ActionListener{
 			if (e.getSource() == generateButton) {
 				panel.removeAll();
 				panel.updateUI();
+				try {
+					callGenerator();
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 		}

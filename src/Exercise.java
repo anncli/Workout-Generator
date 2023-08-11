@@ -29,7 +29,10 @@ public class Exercise {
 		return reps;
 	}
 	
-	public String toString() {
+	public String toString(boolean GUI) {
+		if (GUI) {
+			return String.format(getName() + ";" + getReps());
+		}
 		return String.format(getName() + "\t" + getReps());
 	}
 }
