@@ -6,6 +6,9 @@ public class WorkoutGenerator extends Exercise {
 	public static Scanner userInput = new Scanner(System.in);
 	
 	public static void main(String[] args) throws FileNotFoundException {
+		/***************
+		 * PROMPT USER *
+		 ***************/
 		//Prompt for muscle group
 		System.out.println("Which muscle group would you like to make a workout for?");
 		System.out.print("Options: [arms] [core] [legs]: ");
@@ -45,6 +48,11 @@ public class WorkoutGenerator extends Exercise {
 		System.out.println("Generating workout...");
 		System.out.println();
 		
+		
+		
+		/**********************
+		 * GENERATE EXERCISES *
+		 **********************/
 		ArrayList<Exercise> exercises = new ArrayList<>();
 		for(int i = 0; i < num; i++) {
 			exercises.add(new Exercise());
